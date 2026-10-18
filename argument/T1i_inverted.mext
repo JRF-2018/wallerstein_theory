@@ -1,0 +1,118 @@
+@mext 1
+theory: inverted_core.matcha
+theory: inverted_periphery.matcha
+theory: inverted_unknown.matcha
+; MEXT: Matcha EXTension notation。書式は mext の docs/mext.md（スキルでは references/mext.md）を参照。
+
+[ai]
+; AI（または人）の判断。各行の ; 以降に理由を書く。
+;   same "代表の文言" "同じ意味の文言"
+;   neg  "文言A" "文言B"        … B は A の否定
+;   failure "文言" / effect "文言" … 結論を「不成立からの帰結」「成立の効果」と読む
+;   review "事実@評価" ok|doubtful|reject
+
+[extra]
+;   fact "文言" / rule "a" & "b" -> "c" / default 名: "a" : "b" / "b" / priority 名1 > 名2
+
+[claimed]
+;   E1*: "文言", -"文言"   … 検証したい Extension（* は preferred であることも主張）
+
+; ===== ここから下は mext.py が自動生成（手で直さない） =====
+[atoms]
+k1     claim  "#非正規原則^世界経済の慣行（事実上の規範） [非正規原則_中核]"  ; inverted_core:L4
+f1     fact   "中核の外資の安定した職"  ; inverted_core:L4,inverted_core:L7
+c1     concl  "期間の定めのない雇用が通常である〔中核の外資の安定した職〕"  ; inverted_core:L5,inverted_core:L12
+k2     claim  "#中核特権^世界システム上の位置 [中核特権_中核]"  ; inverted_core:L7
+r1     req    "中核特権_中核／%中核に位置する"  ; inverted_core:L9
+f2     fact   "中核の工業能力の世界シェアは0.974である"  ; inverted_core:L9
+v1     eval   "中核の工業能力の世界シェアは0.974である@中核である"  ; inverted_core:L9
+r2     req    "中核特権_中核／%外資の退出オプションがない"  ; inverted_core:L11
+f3     fact   "中核の外資の撤退ハザード0.05は閾値0.09を下回る"  ; inverted_core:L11
+v2     eval   "中核の外資の撤退ハザード0.05は閾値0.09を下回る@退出の脅しは雇用形態を左右しない"  ; inverted_core:L11
+x1     aux    "（inverted_core:L7 の AND・2項・1）"  ; inverted_core:L7
+k3     claim  "#非正規原則^世界経済の慣行（事実上の規範） [非正規原則_周辺]"  ; inverted_periphery:L4
+f4     fact   "周辺の外資の安定した職"  ; inverted_periphery:L4,inverted_periphery:L7
+c2     concl  "期間の定めのない雇用が通常である〔周辺の外資の安定した職〕"  ; inverted_periphery:L5
+k4     claim  "#中核特権^世界システム上の位置 [中核特権_周辺]"  ; inverted_periphery:L7
+r3     req    "中核特権_周辺／%中核に位置する"  ; inverted_periphery:L9
+f5     fact   "周辺の工業能力の世界シェアは0.003である"  ; inverted_periphery:L9
+v3     eval   "周辺の工業能力の世界シェアは0.003である@中核ではない"  ; inverted_periphery:L9
+r4     req    "中核特権_周辺／%外資の退出オプションがない"  ; inverted_periphery:L11
+f6     fact   "周辺の外資の撤退ハザード0.25は閾値0.09を上回る"  ; inverted_periphery:L11
+v4     eval   "周辺の外資の撤退ハザード0.25は閾値0.09を上回る@いつでも引き上げられる"  ; inverted_periphery:L11
+x2     aux    "（inverted_periphery:L7 の AND・2項・1）"  ; inverted_periphery:L7
+c3     concl  "周辺では中核特権は認められない〔周辺の外資の安定した職〕"  ; inverted_periphery:L12
+k5     claim  "#非正規原則^世界経済の慣行（事実上の規範） [非正規原則_地域U]"  ; inverted_unknown:L4
+f7     fact   "地域Uの外資の安定した職"  ; inverted_unknown:L4,inverted_unknown:L7
+c4     concl  "期間の定めのない雇用が通常である〔地域Uの外資の安定した職〕"  ; inverted_unknown:L5,inverted_unknown:L10
+k6     claim  "#中核特権^世界システム上の位置 [中核特権_地域U]"  ; inverted_unknown:L7
+r5     req    "中核特権_地域U／%中核に位置する"  ; inverted_unknown:L8
+r6     req    "中核特権_地域U／%外資の退出オプションがない"  ; inverted_unknown:L9
+x3     aux    "（inverted_unknown:L7 の AND・2項・1）"  ; inverted_unknown:L7
+ab1    ab     "ab(非正規原則_中核)"
+ab2    ab     "ab(非正規原則_周辺)"
+ab3    ab     "ab(非正規原則_地域U)"
+
+[W]
+f1, f2, f3, f4, f5, f6, f7
+
+[rules]
+r1: v1 -> r1  ; inverted_core:L9 %中核に位置する
+r2: -v1 -> -r1  ; inverted_core:L9 %中核に位置する（必要条件の否定）
+r3: v2 -> r2  ; inverted_core:L11 %外資の退出オプションがない
+r4: -v2 -> -r2  ; inverted_core:L11 %外資の退出オプションがない（必要条件の否定）
+r5: r1 & r2 -> x1  ; AND
+r6: -r1 -> -x1  ; AND（必要条件の否定）
+r7: -r2 -> -x1  ; AND（必要条件の否定）
+r8: -x1 -> -k2  ; inverted_core:L7 要件の否定による主張 中核特権_中核 の不成立
+r9: v3 -> -r3  ; inverted_periphery:L9 %中核に位置する（不成立の根拠）
+r10: v4 -> -r4  ; inverted_periphery:L11 %外資の退出オプションがない（不成立の根拠）
+r11: r3 & r4 -> x2  ; AND
+r12: -r3 -> -x2  ; AND（必要条件の否定）
+r13: -r4 -> -x2  ; AND（必要条件の否定）
+r14: -x2 -> -k4  ; inverted_periphery:L7 要件の否定による主張 中核特権_周辺 の不成立
+r15: r5 & r6 -> x3  ; AND
+r16: -r5 -> -x3  ; AND（必要条件の否定）
+r17: -r6 -> -x3  ; AND（必要条件の否定）
+r18: -x3 -> -k6  ; inverted_unknown:L7 要件の否定による主張 中核特権_地域U の不成立
+
+[defaults]
+非正規原則_中核: f1 : k1, -c1, -ab1 / k1, -c1  ; claim inverted_core:L4 主張 ^世界経済の慣行（事実上の規範）
+e1: f2 : v1, r1 / v1  ; eval inverted_core:L9 評価 @中核である
+e2: f3 : v2, r2 / v2  ; eval inverted_core:L11 評価 @退出の脅しは雇用形態を左右しない
+中核特権_中核: f1, x1 : k2, c1 / k2, c1, ab1  ; claim inverted_core:L7 主張 ^世界システム上の位置
+非正規原則_周辺: f4 : k3, -c2, -ab2 / k3, -c2  ; claim inverted_periphery:L4 主張 ^世界経済の慣行（事実上の規範）
+e3: f5 : v3, -r3 / v3  ; eval inverted_periphery:L9 評価 @中核ではない
+e4: f6 : v4, -r4 / v4  ; eval inverted_periphery:L11 評価 @いつでも引き上げられる
+中核特権_周辺: f4, x2 : k4 / k4, ab2  ; claim inverted_periphery:L7 主張 ^世界システム上の位置
+中核特権_周辺.不成立: ⊤ : -k4, c3 / c3  ; failure inverted_periphery:L12 主張 中核特権_周辺 が成立しないことからの結論
+非正規原則_地域U: f7 : k5, -c4, -ab3 / k5, -c4  ; claim inverted_unknown:L4 主張 ^世界経済の慣行（事実上の規範）
+中核特権_地域U: f7, x3 : k6, c4 / k6, c4, ab3  ; claim inverted_unknown:L7 主張 ^世界システム上の位置
+
+[priority]
+中核特権_中核 > 非正規原則_中核
+中核特権_周辺 > 中核特権_周辺.不成立
+中核特権_周辺 > 非正規原則_周辺
+中核特権_地域U > 非正規原則_地域U
+
+[extensions]
+; 衝突しうるデフォルト: 非正規原則_中核, 中核特権_中核, 中核特権_周辺, 中核特権_地域U
+E1:
+  generating: 非正規原則_中核, e1, e2, 非正規原則_周辺, e3, e4, 中核特権_周辺.不成立, 非正規原則_地域U
+  literals: k1, f1, -c1, r1, f2, v1, r2, f3, v2, x1, k3, f4, -c2, -k4, -r3, f5, v3, -r4, f6, v4, -x2, c3, k5, f7, -c4
+E2 preferred:
+  generating: e1, e2, 中核特権_中核, 非正規原則_周辺, e3, e4, 中核特権_周辺.不成立, 非正規原則_地域U
+  literals: f1, c1, k2, r1, f2, v1, r2, f3, v2, x1, k3, f4, -c2, -k4, -r3, f5, v3, -r4, f6, v4, -x2, c3, k5, f7, -c4, ab1
+
+[marks]
++ r1     inverted_core:L9 %中核に位置する  ; E1:一致 E2:一致
++ r2     inverted_core:L11 %外資の退出オプションがない  ; E1:一致 E2:一致
++ k2     inverted_core:L7 #中核特権  ; E1:不一致 E2:一致
+! r3     inverted_periphery:L9 %中核に位置する  ; E1:一致 E2:一致
+! r4     inverted_periphery:L11 %外資の退出オプションがない  ; E1:一致 E2:一致
+! k4     inverted_periphery:L7 #中核特権  ; E1:一致 E2:一致
+
+[summary]
+extensions: 2 (preferred: 1)
+skeptical: c1, k2, k3, -c2, -k4, c3, k5, -c4
+credulous: c1, k2, k3, -c2, -k4, c3, k5, -c4

@@ -1,0 +1,133 @@
+@mext 1
+theory: employment_core.matcha
+theory: employment_periphery.matcha
+theory: employment_unknown.matcha
+; 試算: 地域U について、周辺に位置することだけが立証され、退出オプションは立証されない場合（T1_employment.mext の写し）
+
+[ai]
+review "工業能力の世界シェアは0.974である@周辺ではない" ok   ; 本体と同じ
+review "外資の撤退ハザード0.05は閾値0.09を下回る@退出の脅しは雇用形態を左右しない" ok   ; 本体と同じ
+review "工業能力の世界シェアは0.003である@周辺である" ok   ; 本体と同じ
+review "外資の撤退ハザード0.25は閾値0.09を上回る@いつでも引き上げられる" doubtful   ; 本体と同じ
+review "雇用安定_中核／「業務が恒常的」" ok   ; 本体と同じ
+review "雇用安定_周辺／「業務が恒常的」" ok   ; 本体と同じ
+review "雇用安定_地域U／「業務が恒常的」" ok   ; 本体と同じ
+
+[extra]
+fact "周辺例外_地域U／%周辺に位置する"   ; 試算: 位置だけが立証されたとする
+
+[claimed]
+B1*: !"#周辺例外^世界システム上の位置（事実上の規範） [周辺例外_地域U]", "期間の定めのない雇用とすべきである〔地域Uの安定した職〕"   ; AND の一方だけでは例外は働かず、原則が残る
+
+; ===== ここから下は mext.py が自動生成（手で直さない） =====
+[atoms]
+k1     claim  "#雇用安定の原則^労働者派遣法25条・労働契約法18条の趣旨"  ; employment_core:L4
+f1     fact   "中核の安定した職"  ; employment_core:L4,employment_core:L8
+r1     req    "雇用安定_中核／「業務が恒常的」"  ; employment_core:L5
+f2     fact   "需要の変動にさらされない職である"  ; employment_core:L5,employment_periphery:L5,employment_unknown:L5
+c1     concl  "期間の定めのない雇用とすべきである〔中核の安定した職〕"  ; employment_core:L6
+k2     claim  "#周辺例外^世界システム上の位置（事実上の規範）"  ; employment_core:L8
+r2     req    "周辺例外_中核／%周辺に位置する"  ; employment_core:L10
+f3     fact   "工業能力の世界シェアは0.974である"  ; employment_core:L10
+v1     eval   "工業能力の世界シェアは0.974である@周辺ではない"  ; employment_core:L10
+r3     req    "周辺例外_中核／%外資の退出オプションがある"  ; employment_core:L12
+f4     fact   "外資の撤退ハザード0.05は閾値0.09を下回る"  ; employment_core:L12
+v2     eval   "外資の撤退ハザード0.05は閾値0.09を下回る@退出の脅しは雇用形態を左右しない"  ; employment_core:L12
+x1     aux    "（employment_core:L8 の AND・2項・1）"  ; employment_core:L8
+c2     concl  "中核では周辺例外は認められない〔中核の安定した職〕"  ; employment_core:L13
+k3     claim  "#雇用安定の原則^労働者派遣法25条・労働契約法18条の趣旨 [雇用安定_周辺]"  ; employment_periphery:L4
+f5     fact   "周辺の安定した職"  ; employment_periphery:L4,employment_periphery:L8
+r4     req    "雇用安定_周辺／「業務が恒常的」"  ; employment_periphery:L5
+c3     concl  "期間の定めのない雇用とすべきである〔周辺の安定した職〕"  ; employment_periphery:L6,employment_periphery:L13
+k4     claim  "#周辺例外^世界システム上の位置（事実上の規範） [周辺例外_周辺]"  ; employment_periphery:L8
+r5     req    "周辺例外_周辺／%周辺に位置する"  ; employment_periphery:L10
+f6     fact   "工業能力の世界シェアは0.003である"  ; employment_periphery:L10
+v3     eval   "工業能力の世界シェアは0.003である@周辺である"  ; employment_periphery:L10
+r6     req    "周辺例外_周辺／%外資の退出オプションがある"  ; employment_periphery:L12
+f7     fact   "外資の撤退ハザード0.25は閾値0.09を上回る"  ; employment_periphery:L12
+v4     eval   "外資の撤退ハザード0.25は閾値0.09を上回る@いつでも引き上げられる"  ; employment_periphery:L12
+x2     aux    "（employment_periphery:L8 の AND・2項・1）"  ; employment_periphery:L8
+k5     claim  "#雇用安定の原則^労働者派遣法25条・労働契約法18条の趣旨 [雇用安定_地域U]"  ; employment_unknown:L4
+f8     fact   "地域Uの安定した職"  ; employment_unknown:L4,employment_unknown:L9
+r7     req    "雇用安定_地域U／「業務が恒常的」"  ; employment_unknown:L5
+c4     concl  "期間の定めのない雇用とすべきである〔地域Uの安定した職〕"  ; employment_unknown:L6,employment_unknown:L12
+k6     claim  "#周辺例外^世界システム上の位置（事実上の規範） [周辺例外_地域U]"  ; employment_unknown:L9
+r8     req    "周辺例外_地域U／%周辺に位置する"  ; employment_unknown:L10
+r9     req    "周辺例外_地域U／%外資の退出オプションがある"  ; employment_unknown:L11
+x3     aux    "（employment_unknown:L9 の AND・2項・1）"  ; employment_unknown:L9
+ab1    ab     "ab(雇用安定_中核)"
+ab2    ab     "ab(雇用安定_周辺)"
+ab3    ab     "ab(雇用安定_地域U)"
+
+[W]
+f1, f2, f3, f4, f5, f6, f7, f8, r8
+
+[rules]
+r1: f2 -> r1  ; employment_core:L5 「業務が恒常的」
+r2: -f2 -> -r1  ; employment_core:L5 「業務が恒常的」（必要条件の否定）
+r3: -r1 -> -k1  ; employment_core:L4 要件の否定による主張 雇用安定_中核 の不成立
+r4: v1 -> -r2  ; employment_core:L10 %周辺に位置する（不成立の根拠）
+r5: v2 -> -r3  ; employment_core:L12 %外資の退出オプションがある（不成立の根拠）
+r6: r2 & r3 -> x1  ; AND
+r7: -r2 -> -x1  ; AND（必要条件の否定）
+r8: -r3 -> -x1  ; AND（必要条件の否定）
+r9: -x1 -> -k2  ; employment_core:L8 要件の否定による主張 周辺例外_中核 の不成立
+r10: f2 -> r4  ; employment_periphery:L5 「業務が恒常的」
+r11: -f2 -> -r4  ; employment_periphery:L5 「業務が恒常的」（必要条件の否定）
+r12: -r4 -> -k3  ; employment_periphery:L4 要件の否定による主張 雇用安定_周辺 の不成立
+r13: v3 -> r5  ; employment_periphery:L10 %周辺に位置する
+r14: -v3 -> -r5  ; employment_periphery:L10 %周辺に位置する（必要条件の否定）
+r15: v4 -> r6  ; employment_periphery:L12 %外資の退出オプションがある
+r16: -v4 -> -r6  ; employment_periphery:L12 %外資の退出オプションがある（必要条件の否定）
+r17: r5 & r6 -> x2  ; AND
+r18: -r5 -> -x2  ; AND（必要条件の否定）
+r19: -r6 -> -x2  ; AND（必要条件の否定）
+r20: -x2 -> -k4  ; employment_periphery:L8 要件の否定による主張 周辺例外_周辺 の不成立
+r21: f2 -> r7  ; employment_unknown:L5 「業務が恒常的」
+r22: -f2 -> -r7  ; employment_unknown:L5 「業務が恒常的」（必要条件の否定）
+r23: -r7 -> -k5  ; employment_unknown:L4 要件の否定による主張 雇用安定_地域U の不成立
+r24: r8 & r9 -> x3  ; AND
+r25: -r8 -> -x3  ; AND（必要条件の否定）
+r26: -r9 -> -x3  ; AND（必要条件の否定）
+r27: -x3 -> -k6  ; employment_unknown:L9 要件の否定による主張 周辺例外_地域U の不成立
+
+[defaults]
+雇用安定_中核: f1, r1 : k1, c1, -ab1 / k1, c1  ; claim employment_core:L4 主張 ^労働者派遣法25条・労働契約法18条の趣旨
+e1: f3 : v1, -r2 / v1  ; eval employment_core:L10 評価 @周辺ではない
+e2: f4 : v2, -r3 / v2  ; eval employment_core:L12 評価 @退出の脅しは雇用形態を左右しない
+周辺例外_中核: f1, x1 : k2 / k2, ab1  ; claim employment_core:L8 主張 ^世界システム上の位置（事実上の規範）
+周辺例外_中核.不成立: ⊤ : -k2, c2 / c2  ; failure employment_core:L13 主張 周辺例外_中核 が成立しないことからの結論
+雇用安定_周辺: f5, r4 : k3, c3, -ab2 / k3, c3  ; claim employment_periphery:L4 主張 ^労働者派遣法25条・労働契約法18条の趣旨
+e3: f6 : v3, r5 / v3  ; eval employment_periphery:L10 評価 @周辺である
+e4: f7 : v4, r6 / v4  ; eval employment_periphery:L12 評価 @いつでも引き上げられる（AI: 疑わしい）
+周辺例外_周辺: f5, x2 : k4, -c3 / k4, -c3, ab2  ; claim employment_periphery:L8 主張 ^世界システム上の位置（事実上の規範）
+雇用安定_地域U: f8, r7 : k5, c4, -ab3 / k5, c4  ; claim employment_unknown:L4 主張 ^労働者派遣法25条・労働契約法18条の趣旨
+周辺例外_地域U: f8, x3 : k6, -c4 / k6, -c4, ab3  ; claim employment_unknown:L9 主張 ^世界システム上の位置（事実上の規範）
+
+[priority]
+周辺例外_中核 > 周辺例外_中核.不成立
+周辺例外_中核 > 雇用安定_中核
+周辺例外_周辺 > 雇用安定_周辺
+周辺例外_地域U > 雇用安定_地域U
+
+[extensions]
+; 衝突しうるデフォルト: 周辺例外_中核, 雇用安定_周辺, 周辺例外_周辺, 周辺例外_地域U
+E1:
+  generating: 雇用安定_中核, e1, e2, 周辺例外_中核.不成立, 雇用安定_周辺, e3, e4, 雇用安定_地域U
+  literals: k1, f1, r1, f2, c1, -k2, -r2, f3, v1, -r3, f4, v2, -x1, c2, k3, f5, r4, c3, r5, f6, v3, r6, f7, v4, x2, k5, f8, r7, c4, r8
+E2 preferred:
+  generating: 雇用安定_中核, e1, e2, 周辺例外_中核.不成立, e3, e4, 周辺例外_周辺, 雇用安定_地域U
+  literals: k1, f1, r1, f2, c1, -k2, -r2, f3, v1, -r3, f4, v2, -x1, c2, f5, r4, -c3, k4, r5, f6, v3, r6, f7, v4, x2, k5, f8, r7, c4, r8, ab2
+
+[marks]
+! r2     employment_core:L10 %周辺に位置する  ; E1:一致 E2:一致
+! r3     employment_core:L12 %外資の退出オプションがある  ; E1:一致 E2:一致
+! k2     employment_core:L8 #周辺例外  ; E1:一致 E2:一致
++ r5     employment_periphery:L10 %周辺に位置する  ; E1:一致 E2:一致
++ r6     employment_periphery:L12 %外資の退出オプションがある  ; E1:一致 E2:一致
++ k4     employment_periphery:L8 #周辺例外  ; E1:不一致 E2:一致
+
+[summary]
+extensions: 2 (preferred: 1)
+skeptical: k1, c1, -k2, c2, -c3, k4, k5, c4
+credulous: k1, c1, -k2, c2, -c3, k4, k5, c4

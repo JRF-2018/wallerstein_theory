@@ -1,0 +1,36 @@
+T4w_law_weak のスキル実行を終え、`argument/skill_runs/T4w_law_weak/T4w_law_weak.report.md` にレポートを書きました。preferred Extension は一つ（E2）で、主張された結論はすべてそこに含まれます。ただし、当為の層の結論は一つのあてはめだけに懸かっています。
+
+**結果**
+- **構文チェック**: 4 ファイルとも、エラー・警告ともに 0 件でした。
+- **Extension**: 2 個で、preferred は E2 だけです。E2 では次の二つが同時に成り立ちます。両者は別の原子なので、矛盾にはなりません。
+  - 当為の層: 「周辺の非正規の賃金は正規より低くてよい」は否定されます。9条が身分秩序を阻却し、補償原則が復活するためです。
+  - 存在の層: 「実際に低い」と「均等待遇は実効を欠く」が成り立ちます。執行が 0.102 で、閾値 0.241 に届かないためです。
+- **予測（`[claimed]`）**: solve の前に P1・P2 を書き、どちらも verify を通りました。`--skeptical` では P2 が NG になります。P2 は preferred でない E1 の予測なので、これは想定どおりです。
+- **Lean**: `lean T4w_law_weak.lean` はエラーなしで通りました。
+- **著者の印**: preferred の E2 で、`+#身分秩序`（`wage_periphery.matcha` の 10 行目）が一致しません。誤記ではありません。`wage_periphery.matcha` は T3 と共通で、この `+` は T3（9条のない理論）の中での成否を表しているからです。T4w では 9条が身分秩序を阻却するので成り立たず、民法92条の読みとしても正しい帰結です。レポート §5 に、注記する案と、`build_argument.py` で別のファイルを生成する案を書きました。
+
+**あてはめの審査**: ok が 8 件、doubtful が 2 件で、reject はありません。そのため、審査を反映しない版（`X.asis.mext`）は本体と同じなので作っていません。doubtful の 2 件は試算しました。
+
+| 試算 | 結果 |
+|---|---|
+| A: 9条のあてはめ（v9）を reject | preferred の結論が「低くてよい」に反転します。¬c4 は v9 一つに懸かっています |
+| B: 強いられた受諾は「慣習による意思」ではないとする（v7 を reject） | 9条がなくても ¬c4 が出て、Extension は 1 個になります |
+
+f9「周辺の安定した職を非正規で埋めている」は、`build_argument.py` の 208 行目に直書きされた前提で、出典がありません。また v9 は、9条の二つの要件（職務の内容の同一と、配置の変更の範囲の同一）を一つの評価にまとめています。どちらもレポート §6 と §10 で指摘しました。
+
+**commit はできていません**。このセッションでは `git add` と `git commit` に承認が必要で、実行できませんでした。次で commit してください。
+
+```
+git add argument/skill_runs/T4w_law_weak/
+git commit -m "Skill run T4w_law_weak"
+```
+
+`T4w_law_weak/` の中で更新・追加したファイル:
+- `T4w_law_weak.mext`（`[ai]` と `[claimed]` を書き、solve 済み）
+- `T4w_law_weak.alt-v9-reject.mext`
+- `T4w_law_weak.alt-v7-reject.mext`
+- `T4w_law_weak.lean`
+- `T4w_law_weak.report.md`
+
+`cli_stdout.txt` は最初から空で、そのままにしてあります。
+exit=0

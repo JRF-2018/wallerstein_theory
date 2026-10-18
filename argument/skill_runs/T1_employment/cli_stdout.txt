@@ -1,0 +1,39 @@
+I ran the skill on T1_employment, and it found a substantive problem in the periphery argument. As written, the theory checks out formally and agrees with the author's `+`/`!` marks. But the periphery exception rests on a number that measures the wrong group of jobs.
+
+**What was run:** The syntax check found 0 errors and 0 warnings across the 3 files. The main theory (with my review applied) has 1 Extension, which is preferred. My prediction written before solving was correct, both in the normal check and in `--skeptical` mode. Both Lean files check without errors.
+
+**The main finding:** I rejected the periphery's third requirement, `周辺の職の0.513が非正規である@正規は通常ではない`.
+- **Wrong group of jobs:** the claim is about *stable* jobs (`周辺の安定した職`), but 0.513 is the non-regular share across *all* jobs. In sim2, variable jobs (0.305 of the total) are always non-regular. So within stable jobs, about (0.513−0.305)/0.695 ≈ 0.30 are non-regular, which leaves about 70% still regular.
+- **Close to circular:** this requirement says almost the same thing as the exception's conclusion, so the exception partly assumes what it sets out to show.
+
+**What changes with the reject:**
+
+| Theory | Periphery result |
+|---|---|
+| As written (`T1_employment.asis.mext`) | 2 Extensions; the preferred one says the exception holds and permanent employment is not normal. Matches all the author's marks. |
+| With my review (`T1_employment.mext`) | The exception fails and the stable-employment principle applies. Disagrees with the author's `+` marks in 2 places. |
+
+**Two trial runs:**
+- **Without the third requirement** (`alt-two-reqs`): the exception holds on periphery position plus the foreign-capital exit hazard alone. So the author's conclusion survives, and this version fits Wallerstein's argument better (position determines employment form).
+- **Measuring stable jobs instead** (`alt-stable-share`): non-regular jobs become a majority of stable jobs only once the exit hazard reaches about 0.35. At that level the exception holds, but 0.35 is not the simulation's setting (0.25).
+
+**Smaller points:**
+- **Core:** my only reservation is about the 0.09 threshold, which comes from the periphery's curve. The core conclusion doesn't depend on it, because the 0.974 world share of industrial capacity alone defeats the exception.
+- **Region U:** no facts are given for the exception, so the principle applies, as the burden of proof requires.
+- **Numbers:** I checked every value against `sims/out` and found no discrepancies.
+
+**My suggestion:** change what `argument/build_argument.py` generates for the periphery's third requirement. Either drop it, or replace it with the non-regular share among stable jobs and state its threshold.
+
+**Tool bug:** for an evaluation removed by a reject, `explain` says "no facts are written" (あてはめる事実が書かれていない), which is wrong. The `report` command notes the reject correctly. The details are at the end of the report.
+
+**Not committed:** the commit needed your approval in this session, so the new T1 files are still uncommitted. I didn't touch the existing changes to `examples/*.mext` or the empty `cli_stdout.txt` files.
+
+Files are in `argument/skill_runs/T1_employment/`:
+- `T1_employment.report.md` (the full report)
+- `T1_employment.mext`
+- `T1_employment.asis.mext`
+- `T1_employment.alt-two-reqs.mext`
+- `T1_employment.alt-stable-share.mext`
+- `T1_employment.lean`
+- `T1_employment.asis.lean`
+exit=0

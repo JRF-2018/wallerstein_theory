@@ -1,0 +1,37 @@
+I checked the three-file T1_employment theory. It's formally valid, but the periphery argument rests on one weak, contestable requirement. The report is in `notebook_runs/T1_employment/T1_employment.report.md`.
+
+**Tool results**
+- **Syntax:** 0 errors, 0 warnings.
+- **Extensions:** 2, of which 1 is preferred.
+  - In the preferred one (E2), the core and region U keep the principle: permanent employment is the norm.
+  - In the periphery, the exception wins and permanent employment is not the norm.
+  - The other Extension (E1) applies the principle first in the periphery. It isn't preferred because the exception outranks the principle.
+- **The author's `+` / `!` marks:** all match in E2. The only mismatch is the periphery exception in E1.
+- **My predictions:** I wrote them before solving and both were correct. The skeptical check fails for the second one, which is expected: it describes the non-preferred Extension.
+- **Lean:** `lean T1_employment.lean` passes.
+
+**My judgments**
+- I declared "中核では周辺例外は認められない" to be the negation of the core's periphery-exception claim.
+- I marked 7 applications ok and 1 doubtful: "0.497 are non-regular → regular is not the norm in foreign-capital jobs". About half the jobs are still regular. The requirement also nearly restates the conclusion, so it is close to circular.
+- No rejects, so the as-written version would be identical. I didn't create `T1_employment.asis.mext`.
+
+**Trial runs**
+- **Rejecting that doubtful evaluation:** the principle applies again in the periphery. An opponent can overturn the conclusion just by disputing this one evaluation.
+- **Adding facts that region U is peripheral and its foreign capital can exit:** region U also falls under the exception. The structural requirements alone are enough to reverse the conclusion.
+
+**Substantive issues**
+- **Weak requirement:** the argument would be sturdier if the "regular is no longer the norm" requirement were dropped or backed by a stronger fact (for example, a majority non-regular).
+- **De facto norm over legal principle:** the exception rests on a de facto norm, yet it overrides a principle grounded in Labour Contract Act art. 18. That holds if the argument describes how things are. As a claim about how things ought to be, the reason for the priority isn't given.
+
+**Tool bug:** in `neg`, the label alias "周辺例外_中核" didn't resolve to the claim atom k2, and there was no warning. Instead it silently renamed the conclusion atom, and verify still passed. I worked around it by using k2's full atom text, then re-solved and re-verified; this is described at the end of the report. `mext.py` should probably warn or list candidates when `neg` / `same` gets an alias like this.
+
+`notebook_runs/` is untracked in git and I haven't committed anything.
+
+Files are in `notebook_runs/T1_employment/`:
+- T1_employment.report.md
+- T1_employment.mext
+- T1_employment.lean
+- T1_employment.alt-v5reject.mext
+- T1_employment.alt-U-periphery.mext
+- report_tables.txt
+exit=0

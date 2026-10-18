@@ -1,0 +1,42 @@
+I checked the T1 employment theory (3 Matcha files read as one theory). The formal argument holds: all three of the author's conclusions come out in the single preferred Extension. On substance, the periphery conclusion rests on one questionable evaluation, and it draws an "ought" from an "is".
+
+**Formal result**
+- **Syntax check:** 0 errors, 0 warnings.
+- **Extensions:** there are 2, and E2 is the only preferred one. E2 contains all three conclusions:
+  - **Core:** the employment-stability principle applies, so jobs should be indefinite-term, and the periphery exception does not hold.
+  - **Periphery:** the exception overrides the principle, so jobs should not be indefinite-term.
+  - **Region U:** with no facts for the exception's requirements, the principle stays.
+- **Author's +/! marks:** all agree with E2. The one mismatch is in E1, which is not preferred: it is the reading that ignores priority, where the principle fires first and blocks the exception.
+- **Predictions (`verify`):** P1 holds both in some Extension and in every preferred one. P2 holds in some Extension but fails the all-Extensions check, which is expected because it predicts a non-preferred Extension.
+- **Lean:** `T1_employment.lean` checks without errors.
+
+**My judgments (`[ai]`)**
+- I found no need for same / neg / failure / effect lines; the default readings are correct.
+- Six evaluations are rated ok, and one is doubtful: the periphery's "外資の撤退ハザード0.25…@いつでも引き上げられる". A 25%-per-year exit hazard does not mean the capital can leave "at any time", so the wording overstates what the requirement needs.
+- None are rejected, so the as-written version would be identical and I didn't create `T1_employment.asis.mext`.
+
+**Problems with the substance**
+- **Is to ought:** the exception is grounded in a "de facto norm", yet it overrides the statutory principle and concludes with "should not". The simulation only shows a tendency. Nothing in the theory says why a de facto norm should take priority over the law.
+- **Share to blanket rule:** in sim2, about 51% of stable periphery jobs become non-regular, so about half stay regular. That doesn't support "should not" for stable jobs in general.
+- **Merged fact:** "需要の変動にさらされない職である" is the same wording in all three regions, so it becomes one shared atom. Adding a contrary fact for one region would knock down the principle in all three. I suggest `build_argument.py` put the region name into that wording.
+
+**Trial runs** (copies of the theory with one change; all predictions verified)
+
+| Trial | Change | Result |
+|---|---|---|
+| alt-U-proven | both exception requirements proven for region U | region U is treated like the periphery |
+| alt-U-position-only | only "located in the periphery" proven | the principle stays, because the exception side must prove both |
+| alt-v4-reject | the doubtful evaluation rejected | the principle comes back in the periphery too |
+
+The prediction wasn't fully blind: the existing `.mext` already contained computed Extensions from an earlier `solve`. I say so in §9 of the report. The "Tools" section at the end of the report also lists three improvement ideas.
+
+I haven't made a git commit. `skill_runs/` is untracked, and the other changes in the tree (SKILL.md, examples) aren't from this run.
+
+Files are in `argument/skill_runs/T1_employment/`:
+- `T1_employment.report.md`
+- `T1_employment.mext`
+- `T1_employment.lean`
+- `T1_employment.alt-U-proven.mext`
+- `T1_employment.alt-U-position-only.mext`
+- `T1_employment.alt-v4-reject.mext`
+exit=0

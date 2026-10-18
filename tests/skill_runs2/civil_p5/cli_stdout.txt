@@ -1,0 +1,32 @@
+I ran the full skill on `tests/skill_runs2/civil_p5/civil.matcha`. The analysis is complete, but along the way I found a bug in `tools/mext.py` and had to work around it.
+
+**Result:** the syntax check found no errors and one warning. mext.py found exactly one extension, E1, and it is preferred. My prediction in `[claimed]` checks out (verify OK), and `lean civil.lean` ran without errors.
+
+| Question | Conclusion | Holds in E1? | Depends on my judgment |
+|---|---|---|---|
+| 1(1) price reduction | Claim granted | Yes | — |
+| 1(2) damages | Claim granted | Yes | Treating the requirements repeated in L22–23 as the same propositions as L3–4 (`same`); without that it can't be derived |
+| 2 acquisitive prescription | Cannot acquire | Yes | Reading the conclusion as following from the claim failing (`failure`) |
+
+**Problems in the source:**
+- **The `+` on `#時効取得` (L34) looks like a slip for `!`.** It is the only mark that doesn't match. A requirement under it, 「二十年間」, is marked `!` by the author, and the conclusion itself is 「時効取得できない」.
+- **「Ｂ@売主」 (L15) looks like a slip for A.** Under Art. 559 the contractor A is the seller. A trial run with the correction (alt-sellerA) gives the same conclusion.
+- **Opposing circumstances listed as support:** L6 (residents' objections) and L39 (the memorandum) both point the other way but sit in the same AND as the reasons for the conclusion.
+- **Contested legal steps:** using the proviso of Art. 636 for a duty to confirm, and the framing under the proviso of Art. 415(1), are open to dispute. I marked both doubtful.
+
+**Question 2 turns entirely on the start date of the twenty years.** Counting from the registration date (Reiwa 9, April 1), and excluding the first day, the twenty years could be complete. The trial run alt-twenty shows that if that is proved, prescription succeeds.
+
+**Tool bug:** writing `failure` with the full atom wording (「…〔FがEに対して乙不動産につき〕」) is silently ignored. `Compiler.is_failure` only compares against the bare conclusion text, even though the spec says the full wording works. That is why the first verify failed. I worked around it with the bare text (「時効取得できない」), but `solve` then prints a false "文言が理論に見当たりません" warning. `effect` goes through the same code, so it probably has the same bug. Separately, `doubtful` on an application with no evaluation (e.g. 「平穏」) doesn't appear anywhere in the report output. Both are written up in the report's 「道具について」 section; I haven't fixed `mext.py`.
+
+There were no `reject` judgments, so I didn't make an asis file: it would match the main one. I haven't committed anything, since `tests/skill_runs2/` was already untracked.
+
+Files are in `tests/skill_runs2/civil_p5/`:
+- civil.report.md
+- civil.mext
+- civil.alt-sellerA.mext
+- civil.alt-nosame.mext
+- civil.alt-twenty.mext
+- civil.lean
+- report_out.txt
+- explain_out.txt
+exit=0

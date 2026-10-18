@@ -1,0 +1,149 @@
+@mext 1
+theory: wage_core.matcha
+theory: wage_periphery.matcha
+theory: power_periphery.matcha
+theory: law_periphery_weak.matcha
+; MEXT: Matcha EXTension notation（本レポートの考案）。書式は docs/mext.md を参照。
+
+[ai]
+; AI（または人）の判断。各行の ; 以降に理由を書く。
+;   same "代表の文言" "同じ意味の文言"
+;   neg  "文言A" "文言B"        … B は A の否定
+;   failure "文言" / effect "文言" … 結論を「不成立からの帰結」「成立の効果」と読む
+;   review "事実@評価" ok|doubtful|reject
+review "非正規の層は契約の切れ目で0.2の割合で職がない@危険を負っている" ok  ; 契約の切れ目ごとに 2 割が職を失うことは、雇用の不安定（失業の危険の負担）の通常の評価として成り立つ。中核・周辺で共通のパラメタ e0 なので、両方の主張で同じ原子になってよい
+review "成立した契約のうち身分秩序によるものの割合は0である@慣習は成立していない" ok  ; 事実たる慣習（民法92条）はまず慣行の存在を要する。その慣行による契約が 0 なら、慣習は成立していない
+review "身分賃金2.209は正規職の列に並ぶ価値2.548を下回る@受け入れない" ok  ; 外部の選択肢（正規職の列に並ぶ価値）のほうが高ければ、労働者は身分賃金を拒む。拒否の方向の評価は堅い
+review "成立した契約のうち身分秩序によるものの割合は0.978である@慣習が成立している" ok  ; 契約の 97.8% がその慣行に従っていれば、慣行の存在としては十分
+review "身分賃金0.629は正規職の列に並ぶ価値0.563を上回る@受け入れる" doubtful  ; 経済的には「外部の選択肢よりましなので受け入れる」が、民法92条の要件は「その慣習による意思」である。外部の選択肢が乏しいために受け入れることを、慣習に従う意思と同視してよいかは争いうる（窮迫による受諾）
+review "安定した職を非正規で埋めている@職務の内容と配置の変更の範囲が同一" doubtful  ; パート有期法9条の「通常の労働者と同視すべき」は、(1) 職務の内容（業務と責任の程度）の同一と (2) 全期間にわたる職務内容・配置の変更の範囲の同一を要する。「安定した職を非正規で埋めている」は (1) を示唆するが、(2)（人材活用の仕組み）を示す事実はない
+review "執行による身分秩序の利潤の減少0.102は維持できなくする水準0.241を下回る@身分秩序は慣性で続く" ok  ; 制裁による利潤の減少が、慣習を不安定にする水準に届かないなら、執行は実効的でない。「慣性で続く」はシミュレーションの時系列で確かめられた帰結の要約であり、%実効的な執行 の否定の根拠として飛躍はない
+
+[extra]
+;   fact "文言" / rule "a" & "b" -> "c" / default 名: "a" : "b" / "b" / priority 名1 > 名2
+default 強行規定_9条: "均衡待遇_周辺／「通常の労働者と同視すべき短時間・有期雇用労働者」" : "ab(身分秩序_周辺)" / "ab(身分秩序_周辺)"  ; 試算: パート有期法9条は強行規定であり、執行の実効がなくても私法上の効力（差別的取扱いの禁止）を持つ。民法92条の事実たる慣習は任意規定と異なる場合にしか働かない
+priority 強行規定_9条 > 身分秩序_周辺  ; 試算: 強行規定は慣習に優先する（民法91条・92条）
+
+[claimed]
+;   E1*: "文言", -"文言"   … 検証したい Extension（* は preferred であることも主張）
+; P1*: "非正規の賃金は正規より低くてよい〔周辺の非正規の労働契約〕", "身分秩序_周辺", -"均衡待遇_周辺", "周辺では均衡待遇は実効を欠く", !"ab(身分秩序_周辺)", -"身分秩序_中核", "中核では身分秩序による賃金の切り下げは認められない", -"非正規の賃金は正規より低くてよい〔中核の非正規の労働契約〕"  ; 弱い執行では均衡待遇が成立しないので例外 !> は働かず、力の優先順位で身分秩序_周辺が補償原則_周辺に勝つ。中核では身分秩序は成立せず補償原則が働く
+; P2: -"非正規の賃金は正規より低くてよい〔周辺の非正規の労働契約〕", "補償原則_周辺", !"身分秩序_周辺", -"均衡待遇_周辺"  ; 優先順位を無視すれば補償原則_周辺が先に働く Extension もある（preferred ではない）
+
+; ===== ここから下は mext.py が自動生成（手で直さない） =====
+[atoms]
+k1     claim  "#補償原則^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986）"  ; wage_core:L4
+f1     fact   "中核の非正規の労働契約"  ; wage_core:L4,wage_core:L9
+r1     req    "補償原則_中核／%雇用が不安定"  ; wage_core:L6
+f2     fact   "非正規の層は契約の切れ目で0.2の割合で職がない"  ; wage_core:L6,wage_periphery:L6
+v1     eval   "非正規の層は契約の切れ目で0.2の割合で職がない@危険を負っている"  ; wage_core:L6,wage_periphery:L6
+c1     concl  "非正規の賃金は正規より低くてよい〔中核の非正規の労働契約〕"  ; wage_core:L7
+k2     claim  "#身分秩序^民法92条（事実たる慣習）"  ; wage_core:L9
+r2     req    "身分秩序_中核／%慣習が成立している"  ; wage_core:L11
+f3     fact   "成立した契約のうち身分秩序によるものの割合は0である"  ; wage_core:L11
+v2     eval   "成立した契約のうち身分秩序によるものの割合は0である@慣習は成立していない"  ; wage_core:L11
+r3     req    "身分秩序_中核／%労働者が身分賃金を受け入れる"  ; wage_core:L13
+f4     fact   "身分賃金2.209は正規職の列に並ぶ価値2.548を下回る"  ; wage_core:L13
+v3     eval   "身分賃金2.209は正規職の列に並ぶ価値2.548を下回る@受け入れない"  ; wage_core:L13
+x1     aux    "（wage_core:L9 の AND・2項・1）"  ; wage_core:L9
+c2     concl  "中核では身分秩序による賃金の切り下げは認められない〔中核の非正規の労働契約〕"  ; wage_core:L14
+k3     claim  "#補償原則^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986） [補償原則_周辺]"  ; wage_periphery:L4
+f5     fact   "周辺の非正規の労働契約"  ; wage_periphery:L4,wage_periphery:L9,law_periphery_weak:L4
+r4     req    "補償原則_周辺／%雇用が不安定"  ; wage_periphery:L6
+c3     concl  "非正規の賃金は正規より低くてよい〔周辺の非正規の労働契約〕"  ; wage_periphery:L7,wage_periphery:L14
+k4     claim  "#身分秩序^民法92条（事実たる慣習） [身分秩序_周辺]"  ; wage_periphery:L9
+r5     req    "身分秩序_周辺／%慣習が成立している"  ; wage_periphery:L11
+f6     fact   "成立した契約のうち身分秩序によるものの割合は0.978である"  ; wage_periphery:L11
+v4     eval   "成立した契約のうち身分秩序によるものの割合は0.978である@慣習が成立している"  ; wage_periphery:L11
+r6     req    "身分秩序_周辺／%労働者が身分賃金を受け入れる"  ; wage_periphery:L13
+f7     fact   "身分賃金0.629は正規職の列に並ぶ価値0.563を上回る"  ; wage_periphery:L13
+v5     eval   "身分賃金0.629は正規職の列に並ぶ価値0.563を上回る@受け入れる"  ; wage_periphery:L13
+x2     aux    "（wage_periphery:L9 の AND・2項・1）"  ; wage_periphery:L9
+k5     claim  "#均衡待遇の実効^パート有期法9条"  ; law_periphery_weak:L4
+r7     req    "均衡待遇_周辺／「通常の労働者と同視すべき短時間・有期雇用労働者」"  ; law_periphery_weak:L5
+f8     fact   "安定した職を非正規で埋めている"  ; law_periphery_weak:L5
+v6     eval   "安定した職を非正規で埋めている@職務の内容と配置の変更の範囲が同一"  ; law_periphery_weak:L5
+r8     req    "均衡待遇_周辺／%実効的な執行"  ; law_periphery_weak:L7
+f9     fact   "執行による身分秩序の利潤の減少0.102は維持できなくする水準0.241を下回る"  ; law_periphery_weak:L7
+v7     eval   "執行による身分秩序の利潤の減少0.102は維持できなくする水準0.241を下回る@身分秩序は慣性で続く"  ; law_periphery_weak:L7
+x3     aux    "（law_periphery_weak:L4 の AND・2項・1）"  ; law_periphery_weak:L4
+c4     concl  "周辺では均衡待遇は実効を欠く〔周辺の非正規の労働契約〕"  ; law_periphery_weak:L8
+ab1    ab     "ab(身分秩序_周辺)"
+
+[W]
+f1, f2, f3, f4, f5, f6, f7, f8, f9
+
+[rules]
+r1: v1 -> r1  ; wage_core:L6 %雇用が不安定
+r2: -v1 -> -r1  ; wage_core:L6 %雇用が不安定（必要条件の否定）
+r3: -r1 -> -k1  ; wage_core:L4 要件の否定による主張 補償原則_中核 の不成立
+r4: v2 -> -r2  ; wage_core:L11 %慣習が成立している（不成立の根拠）
+r5: v3 -> -r3  ; wage_core:L13 %労働者が身分賃金を受け入れる（不成立の根拠）
+r6: r2 & r3 -> x1  ; AND
+r7: -r2 -> -x1  ; AND（必要条件の否定）
+r8: -r3 -> -x1  ; AND（必要条件の否定）
+r9: -x1 -> -k2  ; wage_core:L9 要件の否定による主張 身分秩序_中核 の不成立
+r10: v1 -> r4  ; wage_periphery:L6 %雇用が不安定
+r11: -v1 -> -r4  ; wage_periphery:L6 %雇用が不安定（必要条件の否定）
+r12: -r4 -> -k3  ; wage_periphery:L4 要件の否定による主張 補償原則_周辺 の不成立
+r13: v4 -> r5  ; wage_periphery:L11 %慣習が成立している
+r14: -v4 -> -r5  ; wage_periphery:L11 %慣習が成立している（必要条件の否定）
+r15: v5 -> r6  ; wage_periphery:L13 %労働者が身分賃金を受け入れる
+r16: -v5 -> -r6  ; wage_periphery:L13 %労働者が身分賃金を受け入れる（必要条件の否定）
+r17: r5 & r6 -> x2  ; AND
+r18: -r5 -> -x2  ; AND（必要条件の否定）
+r19: -r6 -> -x2  ; AND（必要条件の否定）
+r20: -x2 -> -k4  ; wage_periphery:L9 要件の否定による主張 身分秩序_周辺 の不成立
+r21: v6 -> r7  ; law_periphery_weak:L5 「通常の労働者と同視すべき短時間・有期雇用労働者」
+r22: -v6 -> -r7  ; law_periphery_weak:L5 「通常の労働者と同視すべき短時間・有期雇用労働者」（必要条件の否定）
+r23: v7 -> -r8  ; law_periphery_weak:L7 %実効的な執行（不成立の根拠）
+r24: r7 & r8 -> x3  ; AND
+r25: -r7 -> -x3  ; AND（必要条件の否定）
+r26: -r8 -> -x3  ; AND（必要条件の否定）
+r27: -x3 -> -k5  ; law_periphery_weak:L4 要件の否定による主張 均衡待遇_周辺 の不成立
+
+[defaults]
+e1: f2 : v1, r1 / v1  ; eval wage_core:L6 評価 @危険を負っている
+補償原則_中核: f1, r1 : k1, -c1 / k1, -c1  ; claim wage_core:L4 主張 ^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986）
+e2: f3 : v2, -r2 / v2  ; eval wage_core:L11 評価 @慣習は成立していない
+e3: f4 : v3, -r3 / v3  ; eval wage_core:L13 評価 @受け入れない
+身分秩序_中核: f1, x1 : k2 / k2  ; claim wage_core:L9 主張 ^民法92条（事実たる慣習）
+身分秩序_中核.不成立: ⊤ : -k2, c2 / c2  ; failure wage_core:L14 主張 身分秩序_中核 が成立しないことからの結論
+e4: f2 : v1, r4 / v1  ; eval wage_periphery:L6 評価 @危険を負っている
+補償原則_周辺: f5, r4 : k3, -c3 / k3, -c3  ; claim wage_periphery:L4 主張 ^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986）
+e5: f6 : v4, r5 / v4  ; eval wage_periphery:L11 評価 @慣習が成立している
+e6: f7 : v5, r6 / v5  ; eval wage_periphery:L13 評価 @受け入れる（AI: 疑わしい）
+身分秩序_周辺: f5, x2 : k4, c3, -ab1 / k4, c3  ; claim wage_periphery:L9 主張 ^民法92条（事実たる慣習）
+e7: f8 : v6, r7 / v6  ; eval law_periphery_weak:L5 評価 @職務の内容と配置の変更の範囲が同一（AI: 疑わしい）
+e8: f9 : v7, -r8 / v7  ; eval law_periphery_weak:L7 評価 @身分秩序は慣性で続く
+均衡待遇_周辺: f5, x3 : k5 / k5, ab1  ; claim law_periphery_weak:L4 主張 ^パート有期法9条
+均衡待遇_周辺.不成立: ⊤ : -k5, c4 / c4  ; failure law_periphery_weak:L8 主張 均衡待遇_周辺 が成立しないことからの結論
+強行規定_9条: r7 : ab1 / ab1  ; extra [extra] 試算: パート有期法9条は強行規定であり、執行の実効がなくても私法上の効力（差別的取扱いの禁止）を持つ。民法92条の事実たる慣習は任意規定と異なる場合にしか働かない
+
+[priority]
+均衡待遇_周辺 > 均衡待遇_周辺.不成立
+均衡待遇_周辺 > 身分秩序_周辺
+強行規定_9条 > 身分秩序_周辺
+身分秩序_中核 > 身分秩序_中核.不成立
+身分秩序_周辺 > 補償原則_周辺
+
+[extensions]
+; 衝突しうるデフォルト: 身分秩序_中核, 補償原則_周辺, 身分秩序_周辺, 均衡待遇_周辺
+E1 preferred:
+  generating: e1, 補償原則_中核, e2, e3, 身分秩序_中核.不成立, e4, 補償原則_周辺, e5, e6, e7, e8, 均衡待遇_周辺.不成立, 強行規定_9条
+  literals: k1, f1, r1, f2, v1, -c1, -k2, -r2, f3, v2, -r3, f4, v3, -x1, c2, k3, f5, r4, -c3, r5, f6, v4, r6, f7, v5, x2, -k5, r7, f8, v6, -r8, f9, v7, -x3, c4, ab1
+
+[marks]
+! r2     wage_core:L11 %慣習が成立している  ; E1:一致
+! r3     wage_core:L13 %労働者が身分賃金を受け入れる  ; E1:一致
+! k2     wage_core:L9 #身分秩序  ; E1:一致
++ r5     wage_periphery:L11 %慣習が成立している  ; E1:一致
++ r6     wage_periphery:L13 %労働者が身分賃金を受け入れる  ; E1:一致
++ k4     wage_periphery:L9 #身分秩序  ; E1:不一致
++ r7     law_periphery_weak:L5 「通常の労働者と同視すべき短時間・有期雇用労働者」  ; E1:一致
+! r8     law_periphery_weak:L7 %実効的な執行  ; E1:一致
+! k5     law_periphery_weak:L4 #均衡待遇の実効  ; E1:一致
+
+[summary]
+extensions: 1 (preferred: 1)
+skeptical: k1, -c1, -k2, c2, k3, -c3, -k5, c4
+credulous: k1, -c1, -k2, c2, k3, -c3, -k5, c4

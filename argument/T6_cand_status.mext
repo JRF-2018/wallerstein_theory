@@ -1,0 +1,50 @@
+@mext 1
+theory: cand_status_core.matcha
+theory: cand_status_periphery.matcha
+; MEXT: Matcha EXTension notation。書式は mext の docs/mext.md（スキルでは references/mext.md）を参照。
+
+[ai]
+; AI（または人）の判断。各行の ; 以降に理由を書く。
+;   same "代表の文言" "同じ意味の文言"
+;   neg  "文言A" "文言B"        … B は A の否定
+;   failure "文言" / effect "文言" … 結論を「不成立からの帰結」「成立の効果」と読む
+;   review "事実@評価" ok|doubtful|reject
+
+[extra]
+;   fact "文言" / rule "a" & "b" -> "c" / default 名: "a" : "b" / "b" / priority 名1 > 名2
+
+[claimed]
+観測*: -"非正規の賃金は正規より低くてよい〔中核の非正規の労働契約〕", "非正規の賃金は正規より低くてよい〔周辺の非正規の労働契約〕"  ; Sim 3 で観測された、当事者に受け入れられている規範
+
+; ===== ここから下は mext.py が自動生成（手で直さない） =====
+[atoms]
+k1     claim  "#身分秩序^身分による賃金の序列（普遍的な規範として） [身分秩序_中核]"  ; cand_status_core:L4
+f1     fact   "中核の非正規の労働契約"  ; cand_status_core:L4
+c1     concl  "非正規の賃金は正規より低くてよい〔中核の非正規の労働契約〕"  ; cand_status_core:L5
+k2     claim  "#身分秩序^身分による賃金の序列（普遍的な規範として） [身分秩序_周辺]"  ; cand_status_periphery:L4
+f2     fact   "周辺の非正規の労働契約"  ; cand_status_periphery:L4
+c2     concl  "非正規の賃金は正規より低くてよい〔周辺の非正規の労働契約〕"  ; cand_status_periphery:L5
+
+[W]
+f1, f2
+
+[rules]
+
+[defaults]
+身分秩序_中核: f1 : k1, c1 / k1, c1  ; claim cand_status_core:L4 主張 ^身分による賃金の序列（普遍的な規範として）
+身分秩序_周辺: f2 : k2, c2 / k2, c2  ; claim cand_status_periphery:L4 主張 ^身分による賃金の序列（普遍的な規範として）
+
+[priority]
+
+[extensions]
+; 衝突しうるデフォルト: なし
+E1 preferred:
+  generating: 身分秩序_中核, 身分秩序_周辺
+  literals: k1, f1, c1, k2, f2, c2
+
+[marks]
+
+[summary]
+extensions: 1 (preferred: 1)
+skeptical: k1, c1, k2, c2
+credulous: k1, c1, k2, c2

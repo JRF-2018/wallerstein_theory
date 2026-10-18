@@ -1,0 +1,64 @@
+@mext 1
+theory: cand_compensation_core.matcha
+theory: cand_compensation_periphery.matcha
+; MEXT: Matcha EXTension notation。書式は mext の docs/mext.md（スキルでは references/mext.md）を参照。
+
+[ai]
+; AI（または人）の判断。各行の ; 以降に理由を書く。
+;   same "代表の文言" "同じ意味の文言"
+;   neg  "文言A" "文言B"        … B は A の否定
+;   failure "文言" / effect "文言" … 結論を「不成立からの帰結」「成立の効果」と読む
+;   review "事実@評価" ok|doubtful|reject
+
+[extra]
+;   fact "文言" / rule "a" & "b" -> "c" / default 名: "a" : "b" / "b" / priority 名1 > 名2
+
+[claimed]
+観測*: -"非正規の賃金は正規より低くてよい〔中核の非正規の労働契約〕", "非正規の賃金は正規より低くてよい〔周辺の非正規の労働契約〕"  ; Sim 3 で観測された、当事者に受け入れられている規範
+
+; ===== ここから下は mext.py が自動生成（手で直さない） =====
+[atoms]
+k1     claim  "#補償原則^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986） [補償原則_中核]"  ; cand_compensation_core:L4
+f1     fact   "中核の非正規の労働契約"  ; cand_compensation_core:L4
+r1     req    "補償原則_中核／%雇用が不安定"  ; cand_compensation_core:L6
+f2     fact   "中核の非正規の層は契約の切れ目で0.2の割合で職がない"  ; cand_compensation_core:L6
+v1     eval   "中核の非正規の層は契約の切れ目で0.2の割合で職がない@危険を負っている"  ; cand_compensation_core:L6
+c1     concl  "非正規の賃金は正規より低くてよい〔中核の非正規の労働契約〕"  ; cand_compensation_core:L7
+k2     claim  "#補償原則^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986） [補償原則_周辺]"  ; cand_compensation_periphery:L4
+f3     fact   "周辺の非正規の労働契約"  ; cand_compensation_periphery:L4
+r2     req    "補償原則_周辺／%雇用が不安定"  ; cand_compensation_periphery:L6
+f4     fact   "周辺の非正規の層は契約の切れ目で0.2の割合で職がない"  ; cand_compensation_periphery:L6
+v2     eval   "周辺の非正規の層は契約の切れ目で0.2の割合で職がない@危険を負っている"  ; cand_compensation_periphery:L6
+c2     concl  "非正規の賃金は正規より低くてよい〔周辺の非正規の労働契約〕"  ; cand_compensation_periphery:L7
+
+[W]
+f1, f2, f3, f4
+
+[rules]
+r1: v1 -> r1  ; cand_compensation_core:L6 %雇用が不安定
+r2: -v1 -> -r1  ; cand_compensation_core:L6 %雇用が不安定（必要条件の否定）
+r3: -r1 -> -k1  ; cand_compensation_core:L4 要件の否定による主張 補償原則_中核 の不成立
+r4: v2 -> r2  ; cand_compensation_periphery:L6 %雇用が不安定
+r5: -v2 -> -r2  ; cand_compensation_periphery:L6 %雇用が不安定（必要条件の否定）
+r6: -r2 -> -k2  ; cand_compensation_periphery:L4 要件の否定による主張 補償原則_周辺 の不成立
+
+[defaults]
+e1: f2 : v1, r1 / v1  ; eval cand_compensation_core:L6 評価 @危険を負っている
+補償原則_中核: f1, r1 : k1, -c1 / k1, -c1  ; claim cand_compensation_core:L4 主張 ^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986）
+e2: f4 : v2, r2 / v2  ; eval cand_compensation_periphery:L6 評価 @危険を負っている
+補償原則_周辺: f3, r2 : k2, -c2 / k2, -c2  ; claim cand_compensation_periphery:L4 主張 ^補償賃金差の原則（Smith『国富論』第1編第10章、Rosen 1986）
+
+[priority]
+
+[extensions]
+; 衝突しうるデフォルト: なし
+E1 preferred:
+  generating: e1, 補償原則_中核, e2, 補償原則_周辺
+  literals: k1, f1, r1, f2, v1, -c1, k2, f3, r2, f4, v2, -c2
+
+[marks]
+
+[summary]
+extensions: 1 (preferred: 1)
+skeptical: k1, -c1, k2, -c2
+credulous: k1, -c1, k2, -c2
