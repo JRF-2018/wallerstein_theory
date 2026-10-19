@@ -6,7 +6,7 @@
 
 > **注意**
 > - [Matcha](https://www.elecode.jp/matcha) は花房孟胤氏による法的推論の形式言語です。本リポジトリは、公開されている用例から読み取った文法で Matcha を扱っています。
-> - 本リポジトリで使う例外記法 **Matcha-D（`as` / `!>` / `>> not`・`>> !` / `:: 優先`）は非公式の拡張で、Elecode／花房氏とは無関係です**。
+> - 本リポジトリで使う例外記法 **Matcha-D（`!>` / `>> not`・`>> !` / `:: 優先`、および主張への `as` 名前付け）は非公式の拡張で、Elecode／花房氏とは無関係です**。名前付けの `as`・参照の `$`・見出しの `::`・コメントの `//` は、花房氏の連載の用例にあるものです。
 > - 道具一式（構文チェッカ、mext、Claude Code のスキル）は、別のリポジトリ **[JRF-2018/mext](https://github.com/JRF-2018/mext)** にあります。
 
 
@@ -136,7 +136,7 @@ Matcha には例外を明示する記法がないので、デフォルト論理�
 ) >> !トゥイーティーは飛ぶ as ペンギン例外 !> $鳥は飛ぶ
 ```
 
-- `as ラベル`: 主張に名前を付けます。
+- `as ラベル`: 主張に名前を付けます（`as` と `$` は原典にある名前付けと参照の記法で、Matcha-D はそれを主張にも使います）。
 - `!> $ラベル`: その主張が、ラベルの主張の例外であることを示します（優先順位と、正当化の阻却）。
 - `>> not 結論`（`>> !結論` も同じ）: 結論の否定です。
 - `:: 優先 $a > $b`: 例外ではない優先順位を、外から与えます。
@@ -176,20 +176,25 @@ Lean 4 と Mathlib で、次のことを示しています（`WallersteinTheory/
 ```bash
 git clone https://github.com/JRF-2018/wallerstein_theory
 cd wallerstein_theory
-pip install numpy matplotlib git+https://github.com/JRF-2018/mext
+pip install numpy matplotlib git+https://github.com/JRF-2018/mext@v0.1.0
 jupyter notebook wallerstein_matcha.ipynb
 ```
 
 - AI の審査（任意）には Claude Code CLI とスキルが要ります。
 
   ```bash
-  claude plugin marketplace add JRF-2018/mext
+  claude plugin marketplace add JRF-2018/mext#v0.1.0
   claude plugin install mext@jrf-mext
   ```
 
   ノートブックは既定では、保存済みの CLI の出力（`notebook_runs/`）を表示します。`RUN_CLAUDE = True` にすると実際に呼びます。
 - Google Colab では、ターミナルで `BIN_DIR=/usr/local/bin curl -fsSL https://claude.ai/install | sh` を実行して Claude Code CLI を入れ、一度 `claude` を起動して認証しておきます。
 - Lean の検証（任意）には elan が要ります。`lake exe cache get` で Mathlib のキャッシュを取得してから `lake build` します。
+
+
+- このレポートは mext の **v0.1.0**（タグ）で作りました。後の版で出力が変わらないよう、上のように版を固定して入れてください。
+
+なお mext 0.2.0 以降には、任意の文書の論証を Matcha に書き起こして分析するスキル「mext分析」「matcha分析」があります。「https://github.com/JRF-2018/mext を使って、この文書を mext分析してください」と AI に頼めば使えます（詳しくは [mext の README](https://github.com/JRF-2018/mext)）。
 
 
 ## ファイルの構成

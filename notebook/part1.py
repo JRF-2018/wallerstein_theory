@@ -92,7 +92,8 @@ def setup():
 このノートブックは、リポジトリ https://github.com/JRF-2018/wallerstein_theory のルートで実行することを想定している。必要なものは次のとおり。
 
 - **Python 3.8 以降**、numpy、matplotlib（シミュレーションと図）。
-- **mext**（Matcha の構文チェッカとデフォルト論理の道具）: `pip install git+https://github.com/JRF-2018/mext` 。
+- **mext**（Matcha の構文チェッカとデフォルト論理の道具）: `pip install git+https://github.com/JRF-2018/mext@v0.1.0` 。
+  - このノートブックは mext の **v0.1.0**（タグ）で作った。後の版で出力が変わらないよう、版を固定して入れる。任意の文書を分析するスキル（mext分析・matcha分析）などは 0.2.0 以降にある。
 - **Claude Code CLI と、スキル matcha-default-extensions**（AI による審査。任意）。
   - Google Colab では、ターミナルで次を実行して Claude Code CLI を入れ、一度 `claude` を起動して認証（authenticate）しておく。
 
@@ -100,7 +101,7 @@ def setup():
     BIN_DIR=/usr/local/bin curl -fsSL https://claude.ai/install | sh
     ```
 
-  - スキルは、ターミナルで `claude plugin marketplace add JRF-2018/mext` と `claude plugin install mext@jrf-mext` を実行して入れる。
+  - スキルは、ターミナルで `claude plugin marketplace add JRF-2018/mext#v0.1.0` と `claude plugin install mext@jrf-mext` を実行して入れる（`#v0.1.0` で版を固定する）。
   - このノートブックでは、`claude` を呼ぶセルの出力として、保存済みの出力（`notebook_runs/`）を表示する。`RUN_CLAUDE = True` にすると実際に呼ぶ（時間と利用料がかかる）。
 - **Lean 4 と Mathlib**（第 11 章の一括検証。任意）。
   - Colab では elan を入れ、`lake exe cache get` で Mathlib のキャッシュを取得してから `lake build` する（数 GB の取得が要る）。
@@ -110,7 +111,7 @@ def setup():
 # Colab で実行する場合は、次の 3 行のコメントを外す
 # !git clone https://github.com/JRF-2018/wallerstein_theory
 # %cd wallerstein_theory
-# !pip install -q git+https://github.com/JRF-2018/mext
+# !pip install -q git+https://github.com/JRF-2018/mext@v0.1.0
 ''')
     code(r'''
 import os, sys, json, subprocess, re
